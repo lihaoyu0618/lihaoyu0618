@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>校园表白墙</title>
+    <style>
+            body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+        .container {
+            width: 60%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            text-align: center;
+            color: #ff4d4d;
+        }
+        .post {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .post h2 {
+            margin-top: 0;
+            color: #ff4d4d;
+        }
+        .post p {
+            margin: 0;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        button {
+            padding: 5px 10px;
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        /* 省略样式部分 */
+    </style>
+</head>
+<body>
+        <audio src="http://m701.music.126.net/20240604194659/30124d4d6fb79fe2a2d2b3a1bc9ce099/jdymusic/obj/wo3DlMOGwrbDjj7DisKw/14096410267/0adb/e6bc/bb93/8937b88be6e4b2c38966e838a64173ad.mp3" autoplay="autoplay" loop="loop" controls="controls" hidden=”true”>
+
+    </audio>
+
+ <a href="page2.html">首页</a>
+    <div class="container">
+        <h1>校园表白墙</h1>
+        <div id="posts"></div>
+        <form id="newPostForm">
+            <!-- 省略表单部分 -->
+             <div class="form-group">
+                <label for="name">姓名：</label>
+                <input type="text" id="name" required>
+            </div>
+            <div class="form-group">
+                <label for="content">表白内容：</label>
+                <textarea id="content" rows="5" required></textarea>
+            </div>
+            <button type="submit">提交</button>
+        </form>
+    </div>
+    
+    <script>
+        // 获取页面元素
+        const postsContainer = document.getElementById('posts');
+        const newPostForm = document.getElementById('newPostForm');
+        const nameInput = document.getElementById('name');
+        const contentInput = document.getElementById('content');
+
+        // 从localStorage中加载帖子
+        function loadPosts() {
+            const posts = JSON.parse(localStorage.getItem('posts')) || [];
+            posts.forEach(post => {
+                addPost(post.name, post.content);
+            });
+        }
+
+        // 添加新的表白帖子
+        function addPost(name, content) {
+            const postElement = document.createElement('div');
+            postElement.classList.add('post');
+            postElement.innerHTML = `
+                <h2>${name}</h2>
+                <p>${content}</p>
+            `;
+            postsContainer.prepend(postElement);
+        }
+
+        // 保存帖子到localStorage
+        function savePost(name, content) {
+            const post = { name, content };
+            const posts = JSON.parse(localStorage.getItem('posts')) || [];
+            posts.push(post);
+            localStorage.setItem('posts', JSON.stringify(posts));
+        }
+
+        // 提交表单事件处理函数
+        newPostForm.addEventListener('submit', (event) => {
+            event.preventDefault(); // 阻止表单默认提交行为
+            const name = nameInput.value.trim();
+            const content = contentInput.value.trim();
+            if (name && content) {
+                savePost(name, content); // 保存帖子到localStorage
+                addPost(name, content); // 添加新的表白帖子
+                nameInput.value = ''; // 清空输入框
+                contentInput.value = ''; // 清空输入框
+            } else {
+                alert('请填写完整信息！'); // 提示用户填写完整信息
+            }
+        });
+
+        // 初始化加载帖子
+        loadPosts();
+    </script>
+    
+    <footer>
+        &copy; 2024 wangzhidaohang.yuefangkeji.lihaoyu
+    </footer>
+</body>
+</html>
