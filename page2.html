@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页</title>
+    <script>
+        document.addEventListener('touchstart', function (event) {
+            if (event.touches.length === 1) {
+                var touch = event.touches[0];
+                startX = touch.clientX;
+                startY = touch.clientY;
+            }
+        }, false);
+
+        document.addEventListener('touchmove', function (event) {
+            if (event.touches.length === 1) {
+                var touch = event.touches[0];
+                deltaX = startX - touch.clientX;
+                deltaY = startY - touch.clientY;
+            }
+        }, false);
+
+        document.addEventListener('touchend', function (event) {
+            if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                if (deltaX > minDeltaX) {
+                    // 左滑，返回上一步
+                    history.back();
+                }
+            }
+        }, false);
+    </script>
+    <style>
+      /* 在这里添加CSS样式 */
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .gallery img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+        }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        header {
+            background-color: #333;
+            padding: 20px;
+            text-align: center;
+            color: white;
+        }
+        nav {
+            display: flex;
+            justify-content: space-around;
+            background-color: #555;
+            padding: 10px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+        }
+        nav a:hover {
+            background-color: #777;
+            border-radius: 4px;
+        }
+        main {
+            padding: 20px;
+        }
+        footer {
+            background-color: #333;
+            padding: 20px;
+            text-align: center;
+            color: white;
+        }
+        @media (max-width: 600px) {
+            nav {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+    
+<h1>网址导航</h1>
+
+
+        <h1>Responsive Webpage</h1>
+    </header>
+    <nav>
+ 
+        <a href="index.html">中考倒计时</a>
+        <a href="z.html">时间</a>
+        <a href="yh.html">烟花</a>
+        <a href="txl.html">同学录</a>
+       <a href="bbq.html">固定表白墙</a>
+       
+     <a href="bbq2.html">单人表白墙</a>
+        <a href="#视频">视频</a>
+        <a href="#音乐">音乐</a>
+        <a href="#小说">小说</a>
+        <a href="#游戏">游戏</a>
+         <a href="#搜索引擎">搜索引擎</a>
+          <a href="#HTML">HTML</a>
+           <a href="#社交">社交</a>
+            <a href="#学习">学习</a>
+             <a href="#大学">大学</a>
+         <a href="#图片">图片</a>
+       </nav>
+       
+    <main>
+
+
+<section id="视频">
+
+
+
+<h2>视频</h2>
+
+
+<p>适当的放松更有利于学习</p>
+<a href="https://www.douyin.com/?is_from_mobile_home=1&recommend=1">抖音</a>
+<a href="https://kbjfree.tv/cn/categories/pandatv">kbjfree</a>
+<a href="https://www.rewuxiu.vip/today/">热舞天堂</a>
+<a href="https://www.huya.com/g/2168">虎牙直播</a>
+
+<a href="https://pc-x.pps.tv/?src=1?src=1">奇秀直播</a>
+<a href="https://wapv.2345.com/dm/list/meinv---.html">二三四五</a>
+
+<a href="https://m.tv.sohu.com/">搜狐视频</a>
+<a href="https://www.youku.com/">优酷网</a>
+<a href="https://m.iqiyi.com/">爱奇艺</a>
+<a href="https://3g.v.qq.com/">腾讯视频</a>
+<a href="https://video.sina.cn/">新浪视频</a>
+<a href="https://www.le.com/">乐视视频</a>
+ <a href="https://haokan.baidu.com/">好看视频</a>
+<a href="http://wap.pptv.com/">PP视频</a>
+<a href="https://www.tudou.com/">土豆网</a>
+<a href="https://www.bilibili.com/">哔哩哔哩</a>
+<a href="https://www.acfun.cn/">AcFun</a>
+<a href="https://www.kinpower.com.cn/#/index">微视网</a>
+ <a href="https://xsj.qq.com/">QQ短视频</a>
+  <a href="https://www.pearvideo.com/?from=intro">梨视频</a>
+  <a href="https://www.mgtv.com/">芒果TV</a>
+  <a href="https://www.77ys.me/">77影视</a>
+  <a href="https://www.huohutv.net/">火狐影视</a>
+  <a href="https://wniutv.com/">蜗牛意思蜗牛意思影视</a>
+  <a href="https://www.kanjuw.net/">看剧网</a>
+  <a href="https://www.uuoozz.com/movie/">uuoozz.com</a>
+<a href="https://vidhub1.cc/">vidhub</a>
+
+<p>需梯子的视频</p>
+<a href="https://www.instagram.com/">美拍</a>
+<a href="https://m.youtube.com/">YouTube</a>
+<a href="https://m.facebook.com/">facebook</a>
+</section>
+
+
+<section id="音乐">
+
+
+
+<h2>音乐</h2>
+<p>歌曲让我们宁静，让我们读懂艺术</p>
+</section>
+<a href="music.html">推荐</a>
+<a href="https://tool.liumingye.cn/music/#/">MyfreeMP3</a>
+<a href="https://music.163.com/">网易云音乐</a>
+<a href="https://music.qq.com/">QQ音乐</a>
+<a href="https://kuwo.cn/">酷我音乐</a>
+<a href="https://music.apple.com/cn/browse">Apple Music - 网页播放器</a>
+<a href="https://music.migu.cn/">咪咕音乐网</a>
+<a href="https://www.joox.com/my-zh_cn">JOOX</a>
+<a href="https://www.9ku.com/">九酷音乐网</a>
+<a href="https://www.last.fm/zh/">Last.fm</a>
+<a href="https://music.91q.com/">千千音乐</a>
+<a href="https://listen.muzikair.com/cn">MUZIK AIR</a>
+<a href="https://www.1ting.com/mv/">一听MV音乐视频大全</a>
+<a href="https://www.tencentmusic.com/">5sing音乐</a>
+<a href="https://www.yymp3.com/">音乐MP3</a>
+<a href="https://m.kugou.com/">酷狗音乐</a>
+<a href="https://biu.moe/#/Index/home">二次元</a>
+<section id="小说">
+<h2>小说</h2>
+<p>书籍是进步的阶梯，让我们畅游在书的海洋中吧！</p>
+<a href="https://fanqienovel.com/">番茄小说网</a>
+<a href="http://www.faloo.com/">飞卢小说</a>
+<a href="https://www.17k.com/">17K小说网</a>
+<a href="https://www.bqguu.cc/">笔趣阁</a>
+<a href="https://www.qidian.com/">起点中文网</a>
+<a href="https://www.zongheng.com/rank">纵横中文网</a>
+<a href="https://www.jjwxc.net/topten.php?orderstr=7">晋江文学城</a>
+<a href="https://www.qdmm.com/rank/">起点女生网</a>
+<a href="https://www.qimao.com/">七猫中文网</a>
+<a href="https://m.xxsy.net/">潇湘书院</a>
+<a href="https://m.book.tiexue.net/3G/">铁血</a>
+<a href="http://sodu.tw/Top.aspx">SoDu</a>
+ <a href="https://chuangshi.qq.com/">创世中文网站</a>
+ 
+
+
+
+</section>
+<section id="游戏">
+<h2>游戏</h2>
+<p>在精神的欢愉中寻求快乐</p>
+<a href="https://poki.com/zh">poki</a>
+</section>
+<section id="搜索引擎">
+<h2>搜索引擎</h2>
+<p>更快更方便快捷的寻找</p>
+
+
+<a href="https://123.quark.cn/">夸克</a>
+<a href="https://cn.bing.com/">必应</a>
+<a href="https://m.sm.cn/">神马</a>
+<a href="https://www.baidu.com/">百度</a>
+<a href="https://www.wuzhuiso.com/">无追</a>
+<a href="https://m.toutiao.com/search">头条</a>
+<a href="https://metaso.cn/">秘塔AI搜索</a>
+
+ <a href="https://github.com/search">Search Githud</a>
+
+ <a href="https://www.iconfinder.com/">iconfinder</a>
+
+ <a href="https://search.creativecommons.org/">cc</a>
+ <a href="https://www.similarsitesearch.com/">Similarsitesearch</a>
+</section>
+<section id="HTML">
+<h2>HTML</h2>
+<p>便捷工具</p>
+
+
+<a href="https://www.jyshare.com/front-end/61/">在线工具</a>
+<a href="https://easylink.cc/">简单云链</a>
+ <a href="https://tools.kalvinbg.cn/">kalvin</a>
+
+ <a href="https://cloud.tencent.com/">腾讯云</a>
+
+ <a href="https://www.aliyun.com/">阿里云</a>
+
+ <a href="https://activity.huaweicloud.com/">华为云</a>
+ <a href="https://www.yimenapp.com/">一门App</a>
+
+
+ <a href="https://beian.miit.gov.cn/">域名备案</a>
+
+ <a href="https://www.gov.cn/">政府</a>
+
+
+
+</section>
+<section id="社交">
+<h2>社交</h2>
+<p>让我们与世界不在有距离</p>
+
+
+
+
+ <a href="https://www.zhihu.com/">知乎</a>
+
+ <a href="https://tieba.baidu.com/">百度贴吧</a>
+  <a href="https://ti.qq.com/qqlevel/index">QQ</a>
+   <a href="https://outlook.live.com/">Outlook</a>
+    <a href="https://exmail.qq.com/login">QQ企业邮箱</a>
+     <a href="https://mail.qq.com/">QQ邮箱</a>
+      <a href="https://email.163.com/">网易邮箱</a>
+       <a href="https://bbs.elecfans.com/">电子发烧友论坛</a>
+        <a href="https://muchong.com/bbs/">小木虫论坛</a>
+         <a href="https://www.dxy.cn/bbs/newweb/pc/home">丁香园论坛</a>
+  <a href="https://www.itpub.net/forum.php">ITPUB论坛</a>
+   <a href="https://www.ad.siemens.com.cn/club/bbs/welcome.aspx">西门子技术论坛</a>
+        
+         <a href="https://m.jiayuan.com/register/matching.php?from=110812595&bd_vid=17344169597019101788">世纪佳缘</a>
+
+
+
+</section>
+<section id="学习">
+<h2>学习</h2>
+<p>用知识改变命运</p>
+ <a href="https://teacher.ewt360.com/">e学堂</a>
+ <a href="https://m.study.163.com/">网易云课堂</a>
+
+ <a href="https://www.xuetangx.com/">学堂在线</a>
+  <a href="https://www.icourse163.org/">中国大学MOOC</a>
+   <a href="">ewant</a>
+    <a href=""></a>
+     <a href="https://www.chinesemooc.org/">华文慕课</a>
+      <a href="https://www.cmooc.com/course">MOOC中国</a>
+       <a href="https://www.coursera.org/">coursera</a>
+        <a href="https://gacco.org/">Gacco</a>
+         <a href="https://www.edx.org/">edX</a>
+            <a href="https://www.open2study.com/">Open2study</a>
+     <a href="https://m.hujiang.com/fr/p1166104/">FUN MOOC</a>
+      <a href="https://www.futurelearn.com/subjects">Futurelearn</a>
+       <a href="http://www.mofunshow.com/">英语魔方秀</a>
+        <a href="https://www.w3school.com.cn/">w3school</a>
+         <a href="https://www.codecademy.com/">CodeCademy</a>
+<a href="https://www.ichunqiu.com/courses">春秋</a>
+<a href="https://www.jikexueyuan.com/">极客学院</a>
+<a href="https://m.boxuegu.com/loginRegister/phoneLogin">博学谷</a>
+<a href="https://study.163.com/curricula/cs.htm">网易编程学习专题</a>
+<a href="https://m.imooc.com/course/list">慕课网</a>
+<a href="https://www.uisdc.com/">优设</a>
+<a href="https://m.gogoup.com/">高高手</a>
+<a href="http://www.howzhi.com/">好知网</a>
+<a href="https://mp.weixin.qq.com/s/AE_BzKh9nvapO1APK5xs_w">原画梦</a>
+<a href="https://daveconservatoire.org/">dave conservatoire</a>
+<a href="https://www.shuge.org/">书格</a>
+<a href="https://book.chaoxing.com/">超星读书</a>
+<a href="https://www.dart-europe.eu/basic-search.php">DART-Europe</a>
+
+
+</section>
+<section id="大学">
+<h2>大学</h2>
+<p>在青春年华，撒不悔汗水</p>
+
+<a href="https://cloud.wujiyan.cc/f/n2dtn/dxmd.html">全国普通高等学校名单</a>
+<a href="https://cloud.wujiyan.cc/f/dEqCD/crdx.html">全国成人高等学校名单</a>
+<h3>大学官网</h3>
+<a href="https://www.princeton.edu/">普林斯顿</a>
+<a href="https://www.mit.edu/">麻省理工</a>
+<a href="https://www.ox.ac.uk/cn">牛津大学</a>
+<a href="https://www.cam.ac.uk/">剑桥大学</a>
+<a href="https://www.tsinghua.edu.cn/">清华大学</a>
+<a href="https://www.pku.edu.cn/">北京大学</a>
+<a href="http://www.ruc.edu.cn/">中国人民大学</a>
+<a href="https://www.bjut.edu.cn/">北京工业大学</a>
+<a href="https://www.bit.edu.cn/">北京理工大学</a>
+<a href="http://www.buaa.edu.cn/">北京航空航天大学</a>
+<a href="https://www.buct.edu.cn/main.htm">北京化工大学</a>
+<a href="https://www.bupt.edu.cn/">北京邮电大学</a>
+<a href="https://www.uibe.edu.cn/">对外经济贸易大学</a>
+<a href="https://www.cuc.edu.cn/mainm.htm">中国传媒大学</a>
+<a href="https://www.muc.edu.cn/">中央民族大学</a>
+<a href="https://www.cumtb.edu.cn/">中国矿业大学(北京)</a>
+<a href="https://www.cufe.edu.cn/">中央财经大学</a>
+<a href="https://www.cupl.edu.cn/">中国政法大学</a>
+<a href="https://www.cup.edu.cn/">中国石油大学(北京)</a>
+<a href="https://www.ccom.edu.cn/">中央音乐学院</a>
+<a href="https://www.bsu.edu.cn/">北京体育大学</a>
+<a href="https://www.bfsu.edu.cn/">北京外国语大学</a>
+<a href="https://www.bjtu.edu.cn/">北京交通大学</a>
+<a href="https://www.ustb.edu.cn/">北京科技大学</a>
+<a href="http://www.bjfu.edu.cn/">北京林业大学</a>
+<a href="https://www.cau.edu.cn/">中国农业大学</a>
+<a href="https://www.bucm.edu.cn/">北京中医药大学</a>
+<a href="http://www.ncepu.edu.cn/">华北电力大学(北京)</a>
+<a href="https://www.bnu.edu.cn/">北京师范大学</a>
+<a href="https://www.nankai.edu.cn/">南开大学</a>
+<a href="https://www.tju.edu.cn/">天津大学</a>
+<a href="http://jyw.tmu.edu.cn/">天津医科大学</a>
+<a href="https://www.hebut.edu.cn/">河北工业大学</a>
+<a href="https://career.fudan.edu.cn/">复旦大学</a>
+<a href="https://www.ecnu.edu.cn/">华东师范大学</a>
+<a href="https://www.shisu.edu.cn/">上海外国语大学</a>
+<a href="https://www.shu.edu.cn/">上海大学</a>
+<a href="https://tj91.tongji.edu.cn/">同济大学</a>
+<a href="https://www.ecust.edu.cn/">华东理工大学</a>
+<a href="https://www.dhu.edu.cn/mainm.htm">东华大学</a>
+<a href="https://www.sjtu.edu.cn/">上海交通大学</a>
+<a href="https://www.sufe.edu.cn/">上海财经大学</a>
+<a href="https://www.nju.edu.cn/">南京大学</a>
+<a href="https://www.seu.edu.cn/">东南大学</a>
+<a href="https://www.suda.edu.cn/">苏州大学</a>
+<a href="https://www.cumt.edu.cn/">中国矿业大学(徐州)</a>
+<a href="https://www.njnu.edu.cn/">南京师范大学</a>
+<a href="https://www.njust.edu.cn/main.htm">南京理工大学</a>
+<a href="https://www.nuaa.edu.cn/">南京航空航天大学</a>
+<a href="https://www.jiangnan.edu.cn/">江南大学</a>
+<a href="https://www.zju.edu.cn/">浙江大学</a>
+<a href="https://www.job.ustc.edu.cn/">中国科学技术大学</a>
+<a href="https://www.xmu.edu.cn/">厦门大学</a>
+<a href="https://www.fzu.edu.cn/">福州大学</a>
+<a href="https://www.ncu.edu.cn/">南昌大学</a>
+<a href="https://www.sdu.edu.cn/">山东大学</a>
+<a href="https://www.ouc.edu.cn/mainm.htm">中国海洋大学</a>
+<a href="http://www.zzu.edu.cn/">郑州大学</a>
+<a href="https://www.whu.edu.cn/">武汉大学</a>
+<a href="https://www.hust.edu.cn/">华中科技大学</a>
+<a href="https://www.ccnu.edu.cn/">华中师范大学</a>
+<a href="https://wap.zuel.edu.cn/mainm.htm">中南财经政法大学</a>
+<a href="https://www.hnu.edu.cn/">湖南大学</a>
+<a href="https://www.csu.edu.cn/">中南大学</a>
+<a href="https://www.hunnu.edu.cn/">湖南师范大学</a>
+<a href="https://www.jnu.edu.cn/main.htm">暨南大学</a>
+<a href="https://www.scut.edu.cn/new/">华南理工大学</a>
+<a href="https://www.dlut.edu.cn/">大连理工大学</a>
+<a href="http://www.lnu.edu.cn/">辽宁大学</a>
+<a href="http://www.dlmu.edu.cn/">大连海事大学</a>
+<a href="https://www.neu.edu.cn/">东北大学</a>
+<a href="https://www.ybu.edu.cn/">延边大学</a>
+<a href="https://www.hit.edu.cn/">哈尔滨工业大学</a>
+<a href="http://www.hrbeu.edu.cn/">哈尔滨工程大学</a>
+<a href="https://mob.xjtu.edu.cn/">西安交通大学</a>
+<a href="https://www.nwpu.edu.cn/">西北工业大学</a>
+<a href="https://www.nwu.edu.cn/">西北大学</a>
+<a href="https://www.snnu.edu.cn/">陕西师范大学</a>
+<a href="https://www.chd.edu.cn/">长安大学</a>
+<a href="https://mobile.xidian.edu.cn/">西安电子科技大学</a>
+<a href="https://job.lzu.edu.cn/">兰州大学</a>
+<a href="https://www.qhu.edu.cn/">青海大学</a>
+<a href="http://www.nxu.edu.cn/">宁夏大学</a>
+<a href="http://www.xju.edu.cn/">新疆大学</a>
+<a href="https://www.shzu.edu.cn/">石河子大学</a>
+<a href="https://www.cqu.edu.cn/">重庆大学</a>
+<a href="http://www.swu.edu.cn/">西南大学</a>
+<a href="https://www.scu.edu.cn/">四川大学</a>
+<a href="https://www.swjtu.edu.cn/">西南交通大学</a>
+<a href="https://www.swufe.edu.cn/">西南财经大学</a>
+<a href="https://www.uestc.edu.cn/">电子科技大学</a>
+<a href="http://www.sicau.edu.cn/">四川农业大学</a>
+<a href="http://jobs.gzu.edu.cn/">贵州大学</a>
+<a href="https://www.ynu.edu.cn/">云南大学</a>
+<a href="https://www.utibet.edu.cn/index.html">西藏大学</a>
+<a href="https://www.ucas.ac.cn/">中国科学院大学</a>
+<p>需梯子</p>
+<a href="https://www.upenn.edu/">费城宾夕法尼亚大学</a>
+
+<a href="https://www.harvard.edu/">哈佛大学</a>
+
+
+
+
+</section>
+<section id="图片">
+    <h2>图片</h2>
+    <a href="https://www.ababbb.com/?ref=yigekuang.cn">绝对领域</a>
+<a href="https://www.6evu.com/?ref=yigekuang.cn">遛无写真</a>
+<a href="https://mt.20rs.com/?ref=yigekuang.cn">热丝美图</a>
+<a href="https://699pic.com/">摄图网</a>
+<a href="https://www.hippopx.com/zh"> Hippopx</a>
+ <a href="https://www.58pic.com/" >千图网</a>
+    <h3>图片选自百度</h3>
+     <a href="#普林斯顿">普林斯顿</a>
+      <a href="#费城宾夕法尼亚大学">费城宾夕法尼亚大学</a>
+       <a href="#麻省理工">麻省理工</a>
+        <a href="#牛津大学">牛津大学</a>
+         <a href="#剑桥大学">剑桥大学</a>
+          <a href="#哈佛大学">哈佛大学</a>
+           <a href="#北京大学">北京大学</a>
+            <a href="#清华大学">清华大学</a>
+             <a href="#复旦大学">复旦大学</a>
+              <a href="#上海交大">上海交大</a>
+               <a href="#哈工大">哈工大</a>
+                <a href="#中国科学院大学">中国科学院大学</a>
+                 <a href="#山东警察学院">山东警察学院</a>
+                  <a href="#西安交大">西安交大</a>
+                   <a href="#浙江大学">浙江大学</a>
+                    <a href="#南京大学">南京大学</a>
+                     <a href="#金陵学院">金陵学院</a>
+                      <a href="#巴黎美术学院">巴黎美术学院</a>
+     <h3>普林斯顿</h3>
+    <div id="普林斯顿" class="gallery">
+        <img src="https://cloud.wujiyan.cc/f/P8YuM/pl1.jpg" alt="普林斯顿">
+        <img src="https://cloud.wujiyan.cc/f/9Zesw/pl2.jpg" alt="普林斯顿">
+        <img src="https://cloud.wujiyan.cc/f/NVlUY/pl3.jpg" alt="普林斯顿">
+        <img src="https://cloud.wujiyan.cc/f/op7sA/pl4.jpg" alt="普林斯顿">
+        <img src="https://cloud.wujiyan.cc/f/W8Gty/pl5.jpg" alt="普林斯顿">
+        <!-- 添加更多图片 -->
+    </div>
+    <h3>费城宾夕法尼亚大学</h3>
+    <div id="费城宾夕法尼亚大学" class="gallery">
+        <img src="https://cloud.wujiyan.cc/f/exwcD/fc1.jpg" alt="费城宾夕法尼亚大学">
+        <img src="https://cloud.wujiyan.cc/f/PgYuM/fc2.jpg" alt="费城宾夕法尼亚大学">
+        <img src="https://cloud.wujiyan.cc/f/9keCw/fc3.jpg" alt="费城宾夕法尼亚大学">
+        <img src="https://cloud.wujiyan.cc/f/NKliY/fc4.jpg" alt="费城宾夕法尼亚大学">
+        <img src="https://cloud.wujiyan.cc/f/om7FA/fc5.jpg" alt="费城宾夕法尼亚大学">
+        <!-- 添加更多图片 -->
+    </div>
+    <h3>麻省理工</h3>
+    <div id="麻省理工" class="gallery">
+        <img src="https://cloud.wujiyan.cc/f/1NghB/ms1.jpg" alt="麻省理工">
+        <img src="https://cloud.wujiyan.cc/f/jNQUg/ms2.jpg" alt="麻省理工">
+        <img src="https://cloud.wujiyan.cc/f/qalUw/ms3.jpg" alt="麻省理工">
+        <img src="https://cloud.wujiyan.cc/f/V97iM/ms4.jpg" alt="麻省理工">
+        <img src="https://cloud.wujiyan.cc/f/YWDil/ms5.jpg" alt="麻省理工">
+        <!-- 添加更多图片 -->
+    </div>
+    <h3>牛津大学</h3>
+    <div id="牛津大学" class="gallery">
+        <img src="https://cloud.wujiyan.cc/f/2owck/niuj1.jpg" alt="牛津大学">
+        <img src="https://cloud.wujiyan.cc/f/lW7sm/niuj2.jpg" alt="牛津大学">
+        <img src="https://cloud.wujiyan.cc/f/ZRoSK/niuj3.jpg" alt="牛津大学">
+        <img src="https://cloud.wujiyan.cc/f/GRaI7/niuj4.jpg" alt="牛津大学">
+        <img src="https://cloud.wujiyan.cc/f/0Ynfk/niuj5.jpg" alt="牛津大学">
+        <!-- 添加更多图片 -->
+    </div>
+    <h3>剑桥大学</h3>
+    <div id="剑桥大学" class="gallery">
+        <img src="https://cloud.wujiyan.cc/f/nMVin/jq1.jpg" alt="剑桥大学">
+        <img src="https://cloud.wujiyan.cc/f/w0YI4/jq2.jpg" alt="剑桥大学">
+        <img src="https://cloud.wujiyan.cc/f/pAzf0/jq3.jpg" alt="剑桥大学">
+        <img src="https://cloud.wujiyan.cc/f/BPkhW/jq4.jpg" alt="剑桥大学">
+        <img src="https://cloud.wujiyan.cc/f/bQduy/jq5.jpg" alt="剑桥大学">
+        <!-- 添加更多图片 -->
+    </div>
+    <h3>哈佛大学</h3>
+    <div id="哈佛大学" class="gallery">
+        <img src="https://cloud.wujiyan.cc/f/aK9Fy/hf1.jpg" alt="哈佛大学">
+        <img src="https://cloud.wujiyan.cc/f/koMin/hf2.jpg" alt="哈佛大学">
+        <img src="https://cloud.wujiyan.cc/f/rk2HW/hf3.jpg" alt="哈佛大学">
+        <img src="https://cloud.wujiyan.cc/f/KaBto/hf4.jpg" alt="哈佛大学">
+        <img src="https://cloud.wujiyan.cc/f/Q66Iz/hf5.jpg" alt="哈佛大学">
+        <!-- 添加更多图片 -->
+    </div>
+    <h3>北京大学</h3>
+    <div id="北京大学" class="gallery">
+        <img src="https://cloud.wujiyan.cc/f/Vb7uM/bj1.jpg" alt="北京大学">
+        <img src="https://cloud.wujiyan.cc/f/YZDsl/bj2.jpg" alt="北京大学">
+        <img src="https://cloud.wujiyan.cc/f/20wSk/bj3.jpg" alt="北京大学">
+        <img src="https://cloud.wujiyan.cc/f/la7cm/bj4.jpg" alt="北京大学">
+        <img src="https://cloud.wujiyan.cc/f/G0ai7/bj5.jpg" alt="北京大学">
+        <!-- 添加更多图片 -->
+    </div>
+    <h3>清华大学</h3>
+    <div id="清华大学" class="gallery">
+        <img src="https://cloud.wujiyan.cc/f/R8Zfz/qh1.jpg" alt="清华大学">
+        <img src="https://cloud.wujiyan.cc/f/M1bCo/qh2.jpg" alt="清华大学">
+        <img src="https://cloud.wujiyan.cc/f/mzQTQ/qh3.jpg" alt="清华大学">
+        <img src="https://cloud.wujiyan.cc/f/AlgS7/qh4.jpg" alt="清华大学">
+        <img src="https://cloud.wujiyan.cc/f/aE9Ty/qh5.jpg" alt="清华大学">
+        <!-- 添加更多图片 -->
+    </div>
+    <h3>复旦大学</h3>
+    <div id="复旦大学" class="gallery">
+        <img src="https://cloud.wujiyan.cc/f/WNGCy/fd1.jpg" alt="复旦大学">
+        <img src="https://cloud.wujiyan.cc/f/RxZsz/fd2.jpg" alt="复旦大学">
+        <img src="https://cloud.wujiyan.cc/f/Mrbto/fd3.jpg" alt="复旦大学">
+        <img src="https://cloud.wujiyan.cc/f/mRQcQ/fd4.jpg" alt="复旦大学">
+        <img src="https://cloud.wujiyan.cc/f/AegU7/fd5.jpg" alt="复旦大学">
+        <!-- 添加更多图片 -->
+    </div>
+    <h3>上海交大</h3>
+    <div id="上海交大" class="gallery">
+        <img src="https://cloud.wujiyan.cc/f/op6iA/sh1.jpg" alt="上海交大">
+        <img src="https://cloud.wujiyan.cc/f/W8VHy/sh2.jpg" alt="上海交大">
+        <img src="https://cloud.wujiyan.cc/f/R8Psz/sh3.jpg" alt="上海交大">
+        <img src="https://cloud.wujiyan.cc/f/M1dto/sh4.jpg" alt="上海交大">
+        <img src="https://cloud.wujiyan.cc/f/mzmfQ/sh5.jpg" alt="上海交大">
+        <!-- 添加更多图片 -->
+    </div>
+    <h3>哈工大</h3>
+    <div id="哈工大" class="gallery">
+        <img src="https://cloud.wujiyan.cc/f/gezH0/hg1.jpg" alt="哈工大">
+        <img src="https://cloud.wujiyan.cc/f/vgoiM/hg2.jpg" alt="哈工大">
+        <img src="https://cloud.wujiyan.cc/f/ypNuP/hg3.jpg" alt="哈工大">
+        <img src="https://cloud.wujiyan.cc/f/DNacW/hg4.jpg" alt="哈工大">
+        <img src="https://cloud.wujiyan.cc/f/zp4Hn/hg5.jpg" alt="哈工大">
+        <!-- 添加更多图片 -->
+    </div>
+    <h3>中国科学院大学</h3>
+    <div id="中国科学院大学" class="gallery">
+        <img src="https://cloud.wujiyan.cc/f/Q89cz/zg1.jpg" alt="中国科学院大学">
+        <img src="https://cloud.wujiyan.cc/f/gzaS0/zg2.jpg" alt="中国科学院大学">
+        <img src="https://cloud.wujiyan.cc/f/v96cM/zg3.jpg" alt="中国科学院大学">
+        <img src="https://cloud.wujiyan.cc/f/yWKSP/zg4.jpg" alt="中国科学院大学">
+        <img src="https://cloud.wujiyan.cc/f/DV7hW/zg5.jpg" alt="中国科学院大学">
+        <!-- 添加更多图片 -->
+    </div>
+    <h3>山东警察学院</h3>
+    <div id="山东警察学院" class="gallery">
+        <img src="https://cloud.wujiyan.cc/f/k1MUn/sd1.jpg" alt="山东警察学院">
+        <img src="https://cloud.wujiyan.cc/f/rx2cW/sd2.jpg" alt="山东警察学院">
+        <img src="https://cloud.wujiyan.cc/f/K8BSo/sd3.jpg" alt="山东警察学院">
+        <img src="https://cloud.wujiyan.cc/f/Q86Iz/sd4.jpg" alt="山东警察学院">
+        <img src="https://cloud.wujiyan.cc/f/NVVFY/sd5.jpg" alt="山东警察学院">
+        <!-- 添加更多图片 -->
+    </div>
+    <h3>西安交大</h3>
+    <div id="西安交大" class="gallery">
+        <img src="https://cloud.wujiyan.cc/f/Al9U7/xa1.jpg" alt="西安交大">
+        <img src="https://cloud.wujiyan.cc/f/aENCy/xa2.jpg" alt="西安交大">
+        <img src="https://cloud.wujiyan.cc/f/k1jFn/xa3.jpg" alt="西安交大">
+        <img src="https://cloud.wujiyan.cc/f/rxAhW/xa4.jpg" alt="西安交大">
+        <img src="https://cloud.wujiyan.cc/f/K8KUo/xa5.jpg" alt="西安交大">
+        <!-- 添加更多图片 -->
+    </div>
+    <h3>浙江大学</h3>
+    <div id="浙江大学" class="gallery">
+        <img src="https://cloud.wujiyan.cc/f/zR1Un/zj1.jpg" alt="浙江大学">
+        <img src="https://cloud.wujiyan.cc/f/X8gsk/zj2.jpg" alt="浙江大学">
+        <img src="https://cloud.wujiyan.cc/f/L8ptE/zj3.jpg" alt="浙江大学">
+        <img src="https://cloud.wujiyan.cc/f/8VdIb/zj4.jpg" alt="浙江大学">
+        <img src="https://cloud.wujiyan.cc/f/4YBSx/zj5.jpg" alt="浙江大学">
+        <!-- 添加更多图片 -->
+    </div>
+    <h3>南京大学</h3>
+    <div id="南京大学" class="gallery">
+        <img src="https://cloud.wujiyan.cc/f/EY7C8/nj1.jpg" alt="南京大学">
+        <img src="https://cloud.wujiyan.cc/f/6VYtM/nj2.jpg" alt="南京大学">
+        <img src="https://cloud.wujiyan.cc/f/xoLtK/nj3.jpg" alt="南京大学">
+        <img src="https://cloud.wujiyan.cc/f/7VbCZ/nj4.jpg" alt="南京大学">
+        <img src="https://cloud.wujiyan.cc/f/ezwID/nj5.jpg" alt="南京大学">
+        <!-- 添加更多图片 -->
+    </div>
+    <h3>金陵学院</h3>
+    <div id="金陵学院" class="gallery">
+        <img src="https://cloud.wujiyan.cc/f/XobUk/jl1.jpg" alt="金陵学院">
+        <img src="https://cloud.wujiyan.cc/f/LkKHE/jl2.jpg" alt="金陵学院">
+        <img src="https://cloud.wujiyan.cc/f/8ajIb/jl3.jpg" alt="金陵学院">
+        <img src="https://cloud.wujiyan.cc/f/4ReSx/jl4.jpg" alt="金陵学院">
+        <img src="https://cloud.wujiyan.cc/f/d6dcD/jl5.jpg" alt="金陵学院">
+        <!-- 添加更多图片 -->
+    </div>
+     <h3>巴黎美术学院</h3>
+      <div id="巴黎美术学院" class="gallery">
+        <img src="https://cloud.wujiyan.cc/f/09nCk/bl1.jpg" alt="巴黎美术学院">
+        <img src="https://cloud.wujiyan.cc/f/ZnotK/bl2.jpg" alt="巴黎美术学院">
+        <img src="https://cloud.wujiyan.cc/f/6mYiM/bl3.jpg" alt="巴黎美术学院">
+        <img src="https://cloud.wujiyan.cc/f/xbLhK/bl4.jpg" alt="巴黎美术学院">
+        <img src="https://cloud.wujiyan.cc/f/7AbuZ/bl5.jpg" alt="巴黎美术学院">
+        <!-- 添加更多图片 -->
+    </div>   
+
+</section>
+</main>
+
+    <footer>
+        &copy; 2024 wangzhidaohang.yuefangkeji.lihaoyu
+    </footer>
+</body>
+</html>
