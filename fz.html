@@ -21,6 +21,7 @@
 		<div id="content">
 			<audio autoplay="autoplay" height="100" width="100">
 				<source src="http://music.163.com/#/song?id=327115" type="audio/mp3" loop=true/>
+				<button onclick="playAudio()">点击播放音乐</button><audio id="myAudio" src="http://music.163.com/#/song?id=327115" loop=true></audio><script>function playAudio() {  var audio = document.getElementById("myAudio");  audio.play();}</script>
 				<embed height="100" width="100" src="http://music.163.com/#/song?id=327115" loop=true/>
 			</audio>
 			<div id="code">
