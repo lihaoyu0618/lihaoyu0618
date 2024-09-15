@@ -1,0 +1,101 @@
+﻿<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+
+	<title>发展历程 </title>  
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<style type="text/css">
+		@font-face {
+			font-family: digit;
+			src: url("digital-7_mono.ttf"/*tpa=./digital-7_mono.ttf*/) format("truetype");
+		}
+	</style>
+	<link href="css/default.css" tppabs="./css/default.css" type="text/css" rel="stylesheet">
+	<script type="text/javascript" src="js/jquery.js" tppabs="./js/jquery.js"></script>
+	<script type="text/javascript" src="js/garden.js" tppabs="./js/garden.js"></script>
+    <script type="text/javascript" src="js/functions.js" tppabs="./js/functions.js"></script>
+<body>
+	<div id="mainDiv">
+		<div id="content">
+			<audio autoplay="autoplay" height="100" width="100">
+				<source src="http://music.163.com/#/song?id=327115" type="audio/mp3" loop=true/>
+				<embed height="100" width="100" src="http://music.163.com/#/song?id=327115" loop=true/>
+			</audio>
+			<div id="code">
+				<span class="comments">各位好：</span><br />
+				<span class="space"><span class="comments">很荣幸在这里遇见你</span></span><br />
+				<span class="space"/><span class="comments">2022年的6月4日，我在虎山初级中学，第一次接触Python，并对它产生了极大的兴趣。之后，接触到了HTML，便开始了自己代码的搭建，从最开始的一个黑色背景，到随机文字呈现，再到一个使用借位的函数，再到一个时钟，一个烟花，直到现在，这一切仍在不断的完善，从一个面到如今的多个面。</span><br />
+				<span class="space"/><span class="comments">在我眼中，他有两个index，第一个是倒计时，是因为，我第一个创作就是它，第二个是我耗费大量时间用a来写的。本来核心理念是简易，它没有过多的"div"和样式，采用最单纯的基础，有直接用id，一切代码1分钟，便能讲透。
+再之后，我接触了kali，之后便迅速接触了C语言，C＋＋，Python，go语言，Ruby，Java。我至今难忘它的gcc,gtt,ls,cd,top,rm,xbuild,mv,nano,bash,cat,nmap,msf.....,会有Python2时的遗憾与pyqt5的烦恼。</span><br />
+				<span class="space"/><span class="comments">第一次用msf,制作木马病毒并使用，第一次看到手机里的隐私，第一次远程打开手机的摄像头，第一次录音，定位，第一次抓肉鸡，第一次使用CC攻击，第一次阅读MySQL，第一次ai调教，第一次密码爆破，第一次资产收集......过去真美好，不用去理会顺序储存，单线结构，不用看见布尔，不用思考C语言的满溢，只管抓包就够了，不用管所谓不可逆的哈希值。2024年8月进入岚山一中。未来可能无法继续关注它，愿未来仍能再见！</span><br />
+			</div>
+			<div id="loveHeart">
+				<canvas id="garden"></canvas>
+				<div id="words">
+					<div id="messages">
+						李昊宇制作的第
+						<div id="elapseClock"></div>
+					</div>
+					<div id="loveu">
+						少年应有凌云志，当骑骏马踏平川！<br/>
+						<div class="signature">- 最普通的人</div>
+
+				</div>
+			</div>
+</div>
+	<div class="bg1">	
+		<div class="main">
+			<footer style="line-height:40px">
+                <div id="copyright">
+                  <p><a href='http://51bbw.cn' target="_blank"></a> 
+                    <a href="http://ymjzy.net" target="_blank"></a>
+                    <a href="" target="_blank"></a></p>
+
+                </div>
+		</div>
+	</div>
+</div>
+
+	<script type="text/javascript">
+		var offsetX = $("#loveHeart").width() / 2;
+		var offsetY = $("#loveHeart").height() / 2 - 55;
+		var together = new Date();
+		together.setFullYear(2022, 06, 4);
+		together.setHours(20);
+		together.setMinutes(0);
+		together.setSeconds(0);
+		together.setMilliseconds(0);
+		
+		if (!document.createElement('canvas').getContext) {
+			var msg = document.createElement("div");
+			msg.id = "errorMsg";
+			msg.innerHTML = "提醒您：您的浏览器版本过旧^_^<br/>"+
+				"推荐使用 <a href='http://dlsw.br.baidu.com/ditui/zujian/bdBrowserSetup-5956-ftn_1000061134.exe' target='_blank'>百度浏览器<br/>请先升级您的浏览器，效果很炫哦~~"; 
+			document.body.appendChild(msg);
+			$("#code").css("display", "none")
+			$("#copyright").css("position", "absolute");
+			$("#copyright").css("bottom", "10px");
+		    document.execCommand("stop");
+		} else {
+			setTimeout(function () {
+				adjustWordsPosition();
+				startHeartAnimation();
+			}, 5000);
+
+			timeElapse(together);
+			setInterval(function () {
+				timeElapse(together);
+			}, 500);
+
+			adjustCodePosition();
+			$("#code").typewriter();
+		}
+	</script>
+    <audio id="bgmMusic" src="http://qzone.haoduoge.com/music/C2C3F0LSXH4D771253124A26CF9C71C939B2A.mp3" preload="auto" type="audio/mp3" autoplay loop=true></audio>
+    
+
+
+</body>
+</html>
