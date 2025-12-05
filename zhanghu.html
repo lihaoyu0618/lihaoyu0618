@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>账户信息安全中心</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+    <!-- 引入 MetingJS -->
+    <script src="https://unpkg.com/meting@2.0.3/dist/Meting.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+           
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://s41.ax1x.com/2025/12/05/pZmQ2qg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column; /* 确保footer在底部 */
+            align-items: center;
+            padding: 20px;
+        }
+           
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+           
+        /* 电脑端样式 */
+        .desktop-layout {
+            display: flex;
+            gap: 30px;
+        }
+           
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            flex: 1;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+           
+        .card:hover {
+            transform: translateY(-5px);
+        }
+           
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+           
+        .card-icon {
+            font-size: 2rem;
+            margin-right: 15px;
+            color: #6c5ce7;
+        }
+           
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+           
+        .info-item {
+            margin-bottom: 20px;
+        }
+           
+        .info-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+           
+        .info-value {
+            font-size: 1.2rem;
+            word-break: break-all;
+            display: flex;
+            align-items: center;
+        }
+           
+        .password-container {
+            display: flex;
+            align-items: center;
+        }
+           
+        .copy-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+           
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+           
+        .website-link {
+            display: inline-block;
+            background: #6c5ce7;
+            color: white;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+           
+        .website-link:hover {
+            background: #5d4ae0;
+            transform: translateY(-2px);
+        }
+           
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            padding: 12px 25px;
+            border-radius: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+           
+        .notification.show {
+            opacity: 1;
+        }
+           
+        /* 移动端样式 */
+        .mobile-layout {
+            display: none; /* 初始隐藏 */
+        }
+           
+        .mobile-layout .card {
+            margin-bottom: 20px;
+        }
+           
+        /* 响应式设计 - 当屏幕宽度小于768px时应用移动端样式 */
+        @media (max-width: 768px) {
+            .desktop-layout {
+                display: none;
+            }
+               
+            .mobile-layout {
+                display: block;
+            }
+               
+            .info-value {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+               
+            .copy-btn {
+                margin-left: 0;
+                margin-top: 10px;
+                align-self: flex-end;
+            }
+        }
+           
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+       <meting-js server="netease" type="playlist" id="12613590957"></meting-js>
+   </style>
+   <div class="container">
+       <!-- 电脑端布局 -->
+       <div class="desktop-layout">
+           <div class="card">
+               <div class="card-header">
+                   <i class="fas fa-user card-icon"></i>                   
+                   <h2 class="card-title">账户信息</h2>                
+               </div>   
+                   <div class="info-item">                    
+                   <div class="info-label">账号名称</div>                    
+                   <div class="info-value">176****0739</div>                
+               </div>                
+               <div class="info-item">                    
+                   <div class="info-label">登录密码</div>                    
+                   <div class="password-container">                        
+                       <div class="info-value" id="password">LiHaoyu3141</div>                        
+                       <button class="copy-btn" onclick="copyPassword()">                            
+                           <i class="far fa-copy"></i> 复制密码                        
+                       </button>                    
+                   </div>                
+               </div>
+           
+               <div class="info-item">                    
+                   <div class="info-label">登录入口</div>                    
+                   <div class="info-value">                        
+                       <a href="https://auth.smartedu.cn/uias/login" class="website-link" target="_blank">                            
+                           <i class="fas fa-external-link-alt"></i> 访问登录页面                        
+                       </a>                    
+                   </div>                
+               </div>            
+           </div>        
+       </div>        
+       <!-- 移动端布局 -->        
+       <div class="mobile-layout">            
+           <div class="card">                
+               <div class="card-header">                    
+                   <i class="fas fa-user card-icon"></i>                  
+                   <h2 class="card-title">账号信息</h2>                
+               </div>     
+                   <div class="info-item">                    
+                   <div class="info-label">账号名称</div>                    
+                   <div class="info-value">176****0739</div>                
+               </div>             
+               <div class="info-item">                    
+                   <div class="info-label">登录密码</div>                    
+                   <div class="password-container">                        
+                       <div class="info-value" id="password-mobile">LiHaoyu3141</div>                        
+                       <button class="copy-btn" onclick="copyPassword()">                            
+                           <i class="far fa-copy"></i> 复制密码                        
+                       </button>                        <script>
+        (function () {
+            var a_idx = 0;
+            window.onclick = function (event) {
+                var a = new Array( "❤可爱❤", "❤漂亮❤", "❤美丽❤", "❤善良❤", "❤自信❤", "❤大方❤", "❤活泼❤", "❤开朗❤",
+                    "❤专注❤", "❤聪明❤", "❤友善❤");
+
+                var heart = document.createElement("b"); //创建b元素
+                heart.onselectstart = new Function('event.returnValue=false'); //防止拖动
+
+                document.body.appendChild(heart).innerHTML = a[a_idx]; //将b元素添加到页面上
+                a_idx = (a_idx + 1) % a.length;
+                heart.style.cssText = "position: fixed;left:-100%;"; //给p元素设置样式
+
+                var f = 16, // 字体大小
+                    x = event.clientX - f / 2, // 横坐标
+                    y = event.clientY - f, // 纵坐标
+                    c = randomColor(), // 随机颜色
+                    a = 1, // 透明度
+                    s = 1.2; // 放大缩小
+
+                var timer = setInterval(function () { //添加定时器
+                    if (a <= 0) {
+                        document.body.removeChild(heart);
+                        clearInterval(timer);
+                    } else {
+                        heart.style.cssText = "font-size:16px;cursor: default;position: fixed;color:" +
+                            c + ";left:" + x + "px;top:" + y + "px;opacity:" + a + ";transform:scale(" +
+                            s + ");";
+
+                        y--;
+                        a -= 0.016;
+                        s += 0.002;
+                    }
+                }, 15)
+
+            }
+            // 随机颜色
+            function randomColor() {
+
+                return "rgb(" + (~~(Math.random() * 255)) + "," + (~~(Math.random() * 255)) + "," + (~~(Math
+                .random() * 255)) + ")";
+
+            }
+        }());
+    </script>
+                   </div>                
+               </div>
+               
+               <div class="info-item">                    
+                   <div class="info-label">登录入口</div>                   
+                   <div class="info-value">                      
+                       <a href="https://auth.smartedu.cn/uias/login" class="website-link" target="_blank">                           
+                           <i class="fas fa-external-link-alt"></i> 访问登录页面    
+                       </a>                   
+                   </div>              
+               </div>             
+           </div>        
+       </div>        
+       <footer>           
+           <p>&#169; 2023 账户安全中心 | 请妥善保管您的账户信息</p>        
+       </footer>    
+   </div>   
+   <div class="notification" id="notification">密码已复制到剪贴板！</div>   
+   
+   <!-- JavaScript -->
+   <script>
+       // 检测设备类型并显示相应布局
+       function detectDeviceType() {
+           if (window.innerWidth <= 768) {
+               document.querySelector('.desktop-layout').style.display = 'none';
+               document.querySelector('.mobile-layout').style.display = 'block';
+           } else {
+               document.querySelector('.desktop-layout').style.display = 'flex';
+               document.querySelector('.mobile-layout').style.display = 'none';
+           }
+       }
+       
+       // 初始检测
+       window.addEventListener('load', detectDeviceType);
+       
+       // 窗口大小改变时重新检测
+       window.addEventListener('resize', detectDeviceType);
+       
+       // 复制密码功能
+       function copyPassword() {
+           const passwordElement = document.getElementById('password') || document.getElementById('password-mobile');
+           const password = passwordElement ? passwordElement.innerText : '';
+           
+           if (!password) {
+               console.error('未找到密码元素。');
+               return;
+           }
+           
+           navigator.clipboard.writeText(password).then(() => {
+               // 显示通知
+               const notification = document.getElementById('notification');
+               notification.classList.add('show');
+               // 2秒后隐藏通知
+               setTimeout(() => {
+                   notification.classList.remove('show');
+               }, 2000);
+           }).catch(err => {
+               console.error('复制失败: ', err);
+               alert('复制失败，请手动复制密码。');
+           });
+       }
+   </script>
+</html>
