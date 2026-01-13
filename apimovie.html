@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>视频批量下载器（同页预览+按钮下载版）</title>
+    <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+    <style>
+        body {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 0 20px;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .input-group {
+            margin: 15px 0;
+        }
+        input {
+            padding: 8px 12px;
+            width: 100px;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            padding: 8px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 2px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .auth-btn {
+            background: #28a745;
+            padding: 12px 30px;
+            font-size: 16px;
+            margin: 20px 0;
+        }
+        .stop-btn {
+            background: #dc3545;
+        }
+        .download-btn {
+            background: #ff7f0e;
+            margin-left: 10px;
+        }
+        .log-box {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            height: 200px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .video-list {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .video-item {
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            background: #fff;
+        }
+        video {
+            width: 100%;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .video-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .copy-tip {
+            color: #28a745;
+            font-size: 12px;
+            margin-left: 10px;
+            display: none;
+        }
+        .tip {
+            color: #dc3545;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        .retry-log {
+            color: #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>视频批量下载器（同页预览+按钮下载）</h2>
+        <p class="tip">核心逻辑：视频在当前页预览 → 点击同页下载按钮 → 不跳转、不弹窗，直接触发下载</p>
+        
+        <div class="input-group">
+            <input type="number" id="downloadCount" placeholder="下载个数" min="1" value="1">
+            <button id="authStartBtn" class="auth-btn">人工授权并开始下载</button>
+            <button id="stopBtn" class="stop-btn" disabled>停止下载</button>
+        </div>
+        
+        <div class="log-box" id="logBox"></div>
+        <div class="video-list" id="videoList"></div>
+    </div>
+
+    <script>
+        let videoUrls = [];
+        let downloadCount = 0;
+        let isStopped = false;
+        let retryDelay = 3000;
+
+        // 日志打印
+        function log(msg, isRetry = false) {
+            const logBox = $('#logBox');
+            const logClass = isRetry ? 'retry-log' : '';
+            logBox.append(`[${new Date().toLocaleTimeString()}] <span class="${logClass}">${msg}</span><br>`);
+            logBox.scrollTop(logBox[0].scrollHeight);
+        }
+
+        // 复制链接
+        function copyToClipboard(text, tipElem) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            tipElem.show().delay(1500).fadeOut();
+        }
+
+        // 生成唯一文件名
+        function getUniqueFilenameByUrl(videoUrl) {
+            let hash = 0;
+            for (let i = 0; i < videoUrl.length; i++) {
+                const charCode = videoUrl.charCodeAt(i);
+                hash = ((hash << 5) - hash) + charCode;
+                hash = hash & hash;
+            }
+            return `video_${Math.abs(hash)}.mp4`;
+        }
+
+        // 获取所有视频链接
+        async function fetchAllVideoUrls() {
+            videoUrls = [];
+            log(`开始获取 ${downloadCount} 个视频链接...`);
+            for (let i = 1; i <= downloadCount && !isStopped; i++) {
+                try {
+                    const res = await $.ajax({
+                        url: 'https://v2.xxapi.cn/api/meinv',
+                        type: 'get',
+                        dataType: 'json'
+                    });
+                    if (res.code === 200 && res.data) {
+                        videoUrls.push(res.data);
+                        log(`第 ${i} 个链接获取成功`);
+                    } else {
+                        log(`第 ${i} 个链接获取失败：响应异常`);
+                        i--;
+                        await new Promise(resolve => setTimeout(resolve, retryDelay));
+                        retryDelay = Math.min(retryDelay + 1000, 10000);
+                    }
+                } catch (err) {
+                    log(`第 ${i} 个链接获取失败：${err.status || '网络错误'}`, true);
+                    i--;
+                    await new Promise(resolve => setTimeout(resolve, retryDelay));
+                    retryDelay = Math.min(retryDelay + 1000, 10000);
+                }
+                if (!isStopped) await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+            log(`链接获取完成，共 ${videoUrls.length} 个有效链接`);
+            return videoUrls;
+        }
+
+        // 核心：同页下载逻辑（不跳转、不弹窗）
+        function downloadVideo(videoUrl, filename) {
+            return new Promise((resolve, reject) => {
+                // 用 Blob 流下载，避免跳转，完全在当前页处理
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', videoUrl, true);
+                xhr.responseType = 'blob';
+                xhr.timeout = 15000;
+
+                // 模拟合法请求头
+                xhr.setRequestHeader('Referer', window.location.origin);
+                xhr.setRequestHeader('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36');
+
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        const blobUrl = URL.createObjectURL(xhr.response);
+                        const a = document.createElement('a');
+                        a.href = blobUrl;
+                        a.download = filename;
+                        a.click();
+                        // 释放资源
+                        setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+                        resolve('下载成功');
+                    } else {
+                        reject(`状态码：${xhr.status}`);
+                    }
+                };
+
+                xhr.onerror = function () {
+                    reject('网络错误（防盗链限制）');
+                };
+
+                xhr.ontimeout = function () {
+                    reject('请求超时');
+                };
+
+                xhr.send();
+            });
+        }
+
+        // 自动点击同页下载按钮 + 失败重试
+        async function downloadWithRetry(videoUrl, index) {
+            const filename = getUniqueFilenameByUrl(videoUrl);
+            let retryCount = 0;
+            let currentDelay = 3000;
+
+            while (!isStopped) {
+                retryCount++;
+                try {
+                    log(`第 ${index} 个视频（重试${retryCount}次）：触发同页下载...`);
+                    // 直接调用下载逻辑（模拟按钮点击后的动作）
+                    await downloadVideo(videoUrl, filename);
+                    log(`第 ${index} 个视频下载成功（文件名：${filename}）`);
+                    return true;
+                } catch (err) {
+                    log(`第 ${index} 个视频下载失败：${err}，${currentDelay/1000}秒后重试...`, true);
+                    currentDelay = Math.min(currentDelay + 2000, 10000);
+                    await new Promise(resolve => setTimeout(resolve, currentDelay));
+                }
+            }
+            return false;
+        }
+
+        // 创建同页视频项（含预览+下载按钮）
+        function createVideoItem(videoUrl, index) {
+            const filename = getUniqueFilenameByUrl(videoUrl);
+            const videoList = $('#videoList');
+            const videoItem = `
+                <div class="video-item" id="videoItem_${index}">
+                    <h4>第 ${index} 个视频（文件名：${filename}）</h4>
+                    <!-- 同页预览视频，不跳转 -->
+                    <video controls src="${videoUrl}" preload="metadata">您的浏览器不支持视频播放</video>
+                    <div class="video-controls">
+                        <button class="copy-btn" data-url="${videoUrl}">复制链接</button>
+                        <button class="download-btn manual-download-btn" data-url="${videoUrl}" data-filename="${filename}">
+                            手动下载（自动下载会触发此逻辑）
+                        </button>
+                        <span class="copy-tip">链接已复制！</span>
+                    </div>
+                </div>
+            `;
+            videoList.append(videoItem);
+
+            // 手动下载按钮绑定
+            $(`.manual-download-btn[data-url="${videoUrl}"]`).click(async function() {
+                const url = $(this).data('url');
+                const fname = $(this).data('filename');
+                try {
+                    await downloadVideo(url, fname);
+                    log(`手动下载第 ${index} 个视频成功`);
+                } catch (err) {
+                    log(`手动下载第 ${index} 个视频失败：${err}`);
+                }
+            });
+
+            // 复制按钮绑定
+            $(`.copy-btn[data-url="${videoUrl}"]`).click(function() {
+                const tip = $(this).siblings('.copy-tip');
+                copyToClipboard(videoUrl, tip);
+            });
+        }
+
+        // 批量下载主逻辑
+        async function batchAutoDownload() {
+            if (videoUrls.length === 0 && !isStopped) {
+                log('无有效视频链接');
+                return;
+            }
+
+            log(`开始批量下载（共 ${videoUrls.length} 个视频，同页处理）...`);
+            for (let i = 0; i < videoUrls.length && !isStopped; i++) {
+                const videoUrl = videoUrls[i];
+                const index = i + 1;
+                // 创建同页视频项
+                createVideoItem(videoUrl, index);
+                // 自动触发下载（模拟点击按钮）
+                const success = await downloadWithRetry(videoUrl, index);
+                if (success && !isStopped) {
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+                }
+            }
+
+            isStopped ? log('任务已停止') : log('所有视频下载完成！');
+        }
+
+        // 停止按钮
+        $('#stopBtn').click(function() {
+            isStopped = true;
+            $(this).prop('disabled', true);
+            $('#authStartBtn').prop('disabled', false);
+            log('正在停止下载...');
+        });
+
+        // 主入口
+        $('#authStartBtn').click(async function () {
+            isStopped = false;
+            retryDelay = 3000;
+            $(this).prop('disabled', true);
+            $('#stopBtn').prop('disabled', false);
+            downloadCount = parseInt($('#downloadCount').val());
+
+            if (isNaN(downloadCount) || downloadCount < 1) {
+                alert('请输入有效个数');
+                $(this).prop('disabled', false);
+                $('#stopBtn').prop('disabled', true);
+                return;
+            }
+
+            $('#logBox').empty();
+            $('#videoList').empty();
+
+            try {
+                await fetchAllVideoUrls();
+                if (isStopped) return;
+                await batchAutoDownload();
+            } catch (err) {
+                log(`任务异常：${err.message}`);
+            } finally {
+                $(this).prop('disabled', false);
+                $('#stopBtn').prop('disabled', true);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>滑动刷新视频+自动续播</title>
+    <style>
+        * { margin: 0; padding: 0; }
+        body { 
+            width: 100vw; 
+            height: 100vh; 
+            background: #000; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: none;
+            overflow: hidden;
+        }
+        /* 视频默认显示，占满屏幕 */
+        video { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            display: block;
+        }
+        /* 播放三角形按钮（居中） */
+        .play-btn {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            border-left: 24px solid #fff;
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+            z-index: 10;
+        }
+        .play-btn:hover {
+            opacity: 1;
+        }
+        /* 滑动提示 */
+        .slide-hint {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255,255,255,0.6);
+            font-size: 12px;
+            z-index: 5;
+        }
+        /* 左下角链接样式 */
+        .bottom-link {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            font-size: 15px;
+            color: purple;
+            opacity: 0.6;
+            text-decoration: none;
+            z-index: 5;
+        }
+        .bottom-link:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- 播放三角形按钮 -->
+    <div class="play-btn" id="playBtn"></div>
+    <!-- 滑动提示 -->
+    <div class="slide-hint">上滑/下滑 → 加载新视频 | 播放结束自动续播</div>
+    <!-- 视频元素 -->
+    <video id="video" playsinline webkit-playsinline preload="metadata"></video>
+    <!-- 左下角链接 -->
+    <a href="https://lihaoyu0618.github.io/lihaoyu0618/page2.html" class="bottom-link">李昊宇</a>
+
+    <script>
+        const video = document.getElementById('video');
+        const playBtn = document.getElementById('playBtn');
+        const VIDEO_URL = 'https://www.ximi.me/video/gf.php';
+        let isPlaying = false;
+
+        // 核心：加载新视频（加随机参数避免缓存）
+        function loadNewVideo() {
+            const newSrc = `${VIDEO_URL}?t=${new Date().getTime()}`;
+            video.src = newSrc;
+            video.load();
+            // 若已在播放状态，加载后自动播放
+            if (isPlaying) {
+                video.play().catch(err => console.log('播放失败:', err));
+            }
+        }
+
+        // 初始化加载第一个视频（仅加载元数据，不自动播放）
+        loadNewVideo();
+
+        // 点击三角形按钮开始播放
+        playBtn.addEventListener('click', () => {
+            video.play().then(() => {
+                isPlaying = true;
+                playBtn.style.display = 'none'; // 播放后隐藏按钮
+            }).catch(err => {
+                console.log('播放失败，请重试:', err);
+            });
+        });
+
+        // 播放结束自动加载下一个视频
+        video.addEventListener('ended', () => {
+            loadNewVideo();
+        });
+
+        // 上下滑动直接加载新视频（触摸事件）
+        let touchStartY = 0;
+        const SLIDE_THRESHOLD = 30; // 滑动触发阈值（避免误触）
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].clientY;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            const touchEndY = e.changedTouches[0].clientY;
+            const slideDistance = touchEndY - touchStartY;
+
+            // 上滑（距离小于负阈值）或下滑（距离大于正阈值）均触发新视频
+            if (Math.abs(slideDistance) >= SLIDE_THRESHOLD) {
+                loadNewVideo();
+                // 若已在播放，保持播放状态
+                if (isPlaying) {
+                    video.play().catch(err => console.log('播放失败:', err));
+                }
+            }
+        });
+    </script>
+</body>
+</html>
