@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>视频全屏滑动刷新播放器19</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { width: 100vw; height: 100vh; position: fixed; top: 0; left: 0; overflow: hidden; background: #000; }
+        #videoPlayer { width: 100vw; height: 100vh; object-fit: cover; display: block; z-index: 1; }
+        /* 顶部悬浮区域：默认隐藏，长按浮现 */
+        .top-float {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            background: rgba(0,0,0,0.7);
+            padding: 8px 15px;
+            /* 新增：默认隐藏 */
+            display: none;
+            transition: all 0.2s ease;
+        }
+        #linkInput {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+        }
+        #linkInput::placeholder { color: rgba(255,255,255,0.6); }
+        #audioBtn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.8);
+            color: #fff;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 10px;
+            cursor: pointer;
+            border: 2px solid #fff;
+            user-select: none;
+        }
+        #audioBtn:active { background: rgba(255,255,255,0.3); }
+        /* 输入框浮层：全屏纯黑，只显示输入框 */
+        #mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 3;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: #000; /* 纯黑背景，视频完全消失 */
+        }
+        #mask-tip {
+            color: #fff;
+            font-size: 16px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        #mask-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-float">
+        <input type="text" id="linkInput" placeholder="输入链接回车播放" value="http://api.yujn.cn/api/manzhan.php?type=video">
+        <div id="audioBtn">🔇</div>
+    </div>
+    <video id="videoPlayer" playsinline preload="auto"></video>
+    <!-- 浮层：纯黑背景，只显示输入框 -->
+    <div id="mask">
+        <div id="mask-tip">当前解析链接（松手后3秒自动隐藏）</div>
+        <input type="text" id="mask-input" placeholder="输入链接回车播放">
+    </div>
+    <script>
+        const linkInput = document.getElementById('linkInput');
+        const maskInput = document.getElementById('mask-input');
+        const videoPlayer = document.getElementById('videoPlayer');
+        const audioBtn = document.getElementById('audioBtn');
+        const mask = document.getElementById('mask');
+        // 新增：获取顶部栏DOM
+        const topFloat = document.querySelector('.top-float');
+        let startY = 0;
+        const refreshThreshold = 80;
+        let audioEnabled = false;
+        let touchCount = 0;
+        let longPressTimer = null;
+        let maskTimer = null;
+        const longPressDelay = 800;
+        const maskShowTime = 3000; // 松手后3秒倒计时
+        // 同步输入框内容
+        function syncInputValue() {
+            maskInput.value = linkInput.value;
+        }
+        // 更新声音按钮
+        function updateAudioBtnIcon() {
+            audioBtn.innerHTML = audioEnabled ? '🔊' : '🔇';
+        }
+        // 切换声音
+        function toggleAudio() {
+            audioEnabled = !audioEnabled;
+            videoPlayer.muted = !audioEnabled;
+            updateAudioBtnIcon();
+        }
+        // 开启声音
+        function enableAudio() {
+            audioEnabled = true;
+            videoPlayer.muted = false;
+            updateAudioBtnIcon();
+        }
+        // 刷新视频
+        function refreshVideo() {
+            let inputLink = linkInput.value.trim();
+            if (!inputLink) return;
+            inputLink = inputLink.includes('?') 
+                ? inputLink + '&t=' + new Date().getTime() 
+                : inputLink + '?t=' + new Date().getTime();
+            videoPlayer.src = inputLink;
+            videoPlayer.load();
+            videoPlayer.muted = !audioEnabled;
+            videoPlayer.play().catch(err => {});
+        }
+        // 视频清零：暂停+清空地址+画面消失
+        function clearVideo() {
+            videoPlayer.pause();
+            videoPlayer.src = ''; // 清空视频地址，画面直接消失
+            videoPlayer.load(); // 加载空内容，确保视频完全清零
+        }
+        // 显示输入框浮层（视频已清零）
+        function showMask() {
+            syncInputValue();
+            mask.style.display = 'flex'; // 只显示输入框
+        }
+        // 松手后启动3秒倒计时
+        function startMaskCountdown() {
+            maskTimer = setTimeout(() => {
+                closeMask();
+            }, maskShowTime);
+        }
+        // 关闭浮层，恢复视频播放
+        function closeMask() {
+            mask.style.display = 'none';
+            clearTimeout(maskTimer);
+            // 保存链接并重新加载视频
+            linkInput.value = maskInput.value.trim();
+            if (linkInput.value.trim()) {
+                refreshVideo(); // 重新请求并播放视频
+            }
+            // 关闭浮层后隐藏顶部栏
+            topFloat.style.display = 'none';
+        }
+        // 视频加载完成保持声音状态
+        videoPlayer.addEventListener('loadeddata', () => {
+            videoPlayer.muted = !audioEnabled;
+            updateAudioBtnIcon();
+        });
+        // 视频结束自动刷新
+        videoPlayer.addEventListener('ended', refreshVideo);
+        // 核心触摸逻辑：双指长按清零视频+浮现顶部栏，松手后3秒倒计时
+        document.addEventListener('touchstart', e => {
+            startY = e.touches[0].clientY;
+            touchCount = e.touches.length;
+            if (touchCount === 2) {
+                longPressTimer = setTimeout(() => {
+                    clearVideo(); // 双指长按：视频直接清零消失
+                    showMask();    // 显示mask输入框
+                    topFloat.style.display = 'flex'; // 新增：长按浮现顶部搜索框+静音按钮
+                }, longPressDelay);
+            }
+        }, { passive: true });
+        document.addEventListener('touchend', e => {
+            touchCount = e.touches.length;
+            clearTimeout(longPressTimer);
+            // 松手后，若浮层显示则启动3秒倒计时
+            if (mask.style.display === 'flex') {
+                startMaskCountdown();
+            }
+            // 滑动刷新逻辑
+            const endY = e.changedTouches[0].clientY;
+            if (Math.abs(endY - startY) >= refreshThreshold) {
+                enableAudio();
+                refreshVideo();
+                // 滑动刷新时隐藏顶部栏
+                topFloat.style.display = 'none';
+            }
+        }, { passive: true });
+        // PC端滑动逻辑
+        document.addEventListener('mousedown', e => startY = e.clientY);
+        document.addEventListener('mouseup', e => {
+            const endY = e.clientY;
+            if (Math.abs(endY - startY) >= refreshThreshold) {
+                enableAudio();
+                refreshVideo();
+                // PC端滑动刷新也隐藏顶部栏
+                topFloat.style.display = 'none';
+            }
+        });
+        // 回车事件
+        linkInput.addEventListener('keydown', e => {
+            if (e.key === 'Enter') refreshVideo();
+        });
+        maskInput.addEventListener('keydown', e => {
+            if (e.key === 'Enter') closeMask();
+        });
+        // 点击浮层外关闭
+        mask.addEventListener('click', (e) => {
+            if (e.target === mask) closeMask();
+        });
+        // 声音按钮点击
+        audioBtn.addEventListener('click', toggleAudio);
+        // 点击页面开启声音
+        document.addEventListener('click', (e) => {
+            if (!mask.contains(e.target) && e.target !== audioBtn && e.target !== linkInput) {
+                enableAudio();
+                // 点击页面其他区域隐藏顶部栏
+                topFloat.style.display = 'none';
+            }
+        }, { once: false });
+        // 初始化
+        window.onload = () => {
+            updateAudioBtnIcon();
+            syncInputValue();
+            refreshVideo();
+            // 初始化隐藏顶部栏
+            topFloat.style.display = 'none';
+        };
+    </script>
+</body>
+</html>
