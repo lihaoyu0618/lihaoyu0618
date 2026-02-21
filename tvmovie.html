@@ -17,9 +17,9 @@
             z-index: 9999;
             display: flex;
             align-items: center;
+            gap: 10px;
             background: rgba(0,0,0,0.7);
             padding: 8px 15px;
-            /* 新增：默认隐藏 */
             display: none;
             transition: all 0.2s ease;
         }
@@ -34,6 +34,22 @@
             outline: none;
         }
         #linkInput::placeholder { color: rgba(255,255,255,0.6); }
+        /* 视频ID下拉菜单样式 */
+        #videoIdSelect {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            cursor: pointer;
+            min-width: 80px;
+        }
+        #videoIdSelect option {
+            background: #333;
+            color: #fff;
+        }
         #audioBtn {
             width: 40px;
             height: 40px;
@@ -44,7 +60,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-left: 10px;
             cursor: pointer;
             border: 2px solid #fff;
             user-select: none;
@@ -86,13 +101,31 @@
 </head>
 <body>
     <div class="top-float">
-        <input type="text" id="linkInput" placeholder="输入链接回车播放" value="http://api.yujn.cn/api/manzhan.php?type=video">
+        <input type="text" id="linkInput" placeholder="输入链接回车播放" value="https://api.mmp.cc/api/ksvideo?type=mp4&id=jk">
+        <!-- 视频ID下拉菜单 -->
+        <select id="videoIdSelect">
+            <option value="jk">jk</option>
+            <option value="YuMeng">欲梦</option>
+            <option value="NvDa">女大</option>
+            <option value="NvGao">女高</option>
+            <option value="ReWu">热舞</option>
+            <option value="QingCun">清纯</option>
+            <option value="SheJie">蛇姐</option>
+            <option value="ChuanDa">穿搭</option>
+            <option value="GaoZhiLiangXiaoJieJie">高质量小姐姐</option>
+            <option value="HanFu">汉服</option>
+            <option value="HeiSi">黑丝</option>
+            <option value="BianZhuang">变装</option>
+            <option value="LuoLi">萝莉</option>
+            <option value="TianMei">甜妹</option>
+            <option value="BaiSi">白丝</option>
+        </select>
         <div id="audioBtn">🔇</div>
     </div>
     <video id="videoPlayer" playsinline preload="auto"></video>
     <!-- 浮层：纯黑背景，只显示输入框 -->
     <div id="mask">
-        <div id="mask-tip">当前解析链接（松手后3秒自动隐藏）</div>
+        <div id="mask-tip">当前解析链接（松手后10秒自动隐藏）</div>
         <input type="text" id="mask-input" placeholder="输入链接回车播放">
     </div>
     <script>
@@ -101,7 +134,7 @@
         const videoPlayer = document.getElementById('videoPlayer');
         const audioBtn = document.getElementById('audioBtn');
         const mask = document.getElementById('mask');
-        // 新增：获取顶部栏DOM
+        const videoIdSelect = document.getElementById('videoIdSelect');
         const topFloat = document.querySelector('.top-float');
         let startY = 0;
         const refreshThreshold = 80;
@@ -109,28 +142,45 @@
         let touchCount = 0;
         let longPressTimer = null;
         let maskTimer = null;
+        let topFloatTimer = null; // 顶部栏独立计时
         const longPressDelay = 800;
-        const maskShowTime = 3000; // 松手后3秒倒计时
+        const maskShowTime = 10000; // 浮层显示10秒
+        const topFloatShowTime = 6000; // 顶部栏悬浮6秒（核心修改）
+
+        // 替换链接中的视频ID并更新输入框
+        function changeVideoId(newId) {
+            const baseUrl = 'https://api.mmp.cc/api/ksvideo?type=mp4&id=';
+            linkInput.value = baseUrl + newId;
+            syncInputValue();
+            refreshVideo();
+            resetTopFloatTimer(); // 切换ID重置顶部栏计时
+        }
+
         // 同步输入框内容
         function syncInputValue() {
             maskInput.value = linkInput.value;
         }
+
         // 更新声音按钮
         function updateAudioBtnIcon() {
             audioBtn.innerHTML = audioEnabled ? '🔊' : '🔇';
         }
+
         // 切换声音
         function toggleAudio() {
             audioEnabled = !audioEnabled;
             videoPlayer.muted = !audioEnabled;
             updateAudioBtnIcon();
+            resetTopFloatTimer(); // 点击声音按钮重置计时
         }
+
         // 开启声音
         function enableAudio() {
             audioEnabled = true;
             videoPlayer.muted = false;
             updateAudioBtnIcon();
         }
+
         // 刷新视频
         function refreshVideo() {
             let inputLink = linkInput.value.trim();
@@ -143,58 +193,86 @@
             videoPlayer.muted = !audioEnabled;
             videoPlayer.play().catch(err => {});
         }
+
         // 视频清零：暂停+清空地址+画面消失
         function clearVideo() {
             videoPlayer.pause();
-            videoPlayer.src = ''; // 清空视频地址，画面直接消失
-            videoPlayer.load(); // 加载空内容，确保视频完全清零
+            videoPlayer.src = '';
+            videoPlayer.load();
         }
-        // 显示输入框浮层（视频已清零）
+
+        // 显示输入框浮层
         function showMask() {
             syncInputValue();
-            mask.style.display = 'flex'; // 只显示输入框
+            mask.style.display = 'flex';
         }
-        // 松手后启动3秒倒计时
+
+        // 显示顶部栏并启动6秒计时
+        function showTopFloat() {
+            topFloat.style.display = 'flex';
+            resetTopFloatTimer(); // 重新计时
+        }
+
+        // 重置顶部栏6秒计时
+        function resetTopFloatTimer() {
+            clearTimeout(topFloatTimer);
+            topFloatTimer = setTimeout(() => {
+                topFloat.style.display = 'none';
+            }, topFloatShowTime);
+        }
+
+        // 关闭顶部栏
+        function closeTopFloat() {
+            clearTimeout(topFloatTimer);
+            topFloat.style.display = 'none';
+        }
+
+        // 松手后启动浮层10秒倒计时
         function startMaskCountdown() {
             maskTimer = setTimeout(() => {
                 closeMask();
             }, maskShowTime);
         }
-        // 关闭浮层，恢复视频播放
+
+        // 关闭浮层
         function closeMask() {
             mask.style.display = 'none';
             clearTimeout(maskTimer);
             // 保存链接并重新加载视频
             linkInput.value = maskInput.value.trim();
             if (linkInput.value.trim()) {
-                refreshVideo(); // 重新请求并播放视频
+                refreshVideo();
             }
-            // 关闭浮层后隐藏顶部栏
-            topFloat.style.display = 'none';
+            // 浮层关闭后不主动隐藏顶部栏，由自身6秒计时控制
         }
+
         // 视频加载完成保持声音状态
         videoPlayer.addEventListener('loadeddata', () => {
             videoPlayer.muted = !audioEnabled;
             updateAudioBtnIcon();
         });
+
         // 视频结束自动刷新
         videoPlayer.addEventListener('ended', refreshVideo);
-        // 核心触摸逻辑：双指长按清零视频+浮现顶部栏，松手后3秒倒计时
+
+        // 核心触摸逻辑：双指长按清零视频+浮现顶部栏+浮层
         document.addEventListener('touchstart', e => {
             startY = e.touches[0].clientY;
             touchCount = e.touches.length;
             if (touchCount === 2) {
                 longPressTimer = setTimeout(() => {
-                    clearVideo(); // 双指长按：视频直接清零消失
-                    showMask();    // 显示mask输入框
-                    topFloat.style.display = 'flex'; // 新增：长按浮现顶部搜索框+静音按钮
+                    clearVideo();
+                    showMask();
+                    showTopFloat(); // 显示顶部栏并启动6秒计时
                 }, longPressDelay);
             }
         }, { passive: true });
+
+        // 触摸结束逻辑
         document.addEventListener('touchend', e => {
             touchCount = e.touches.length;
             clearTimeout(longPressTimer);
-            // 松手后，若浮层显示则启动3秒倒计时
+            // 浮层显示则启动10秒计时
             if (mask.style.display === 'flex') {
                 startMaskCountdown();
             }
@@ -203,10 +281,10 @@
             if (Math.abs(endY - startY) >= refreshThreshold) {
                 enableAudio();
                 refreshVideo();
-                // 滑动刷新时隐藏顶部栏
-                topFloat.style.display = 'none';
+                closeTopFloat(); // 滑动刷新直接隐藏顶部栏
             }
         }, { passive: true });
+
         // PC端滑动逻辑
         document.addEventListener('mousedown', e => startY = e.clientY);
         document.addEventListener('mouseup', e => {
@@ -214,38 +292,53 @@
             if (Math.abs(endY - startY) >= refreshThreshold) {
                 enableAudio();
                 refreshVideo();
-                // PC端滑动刷新也隐藏顶部栏
-                topFloat.style.display = 'none';
+                closeTopFloat();
             }
         });
+
         // 回车事件
         linkInput.addEventListener('keydown', e => {
-            if (e.key === 'Enter') refreshVideo();
+            if (e.key === 'Enter') {
+                refreshVideo();
+                resetTopFloatTimer(); // 回车播放重置计时
+            }
         });
         maskInput.addEventListener('keydown', e => {
             if (e.key === 'Enter') closeMask();
         });
+
         // 点击浮层外关闭
         mask.addEventListener('click', (e) => {
             if (e.target === mask) closeMask();
         });
-        // 声音按钮点击
-        audioBtn.addEventListener('click', toggleAudio);
-        // 点击页面开启声音
+
+        // 点击输入框/菜单重置顶部栏计时
+        linkInput.addEventListener('click', resetTopFloatTimer);
+        videoIdSelect.addEventListener('click', resetTopFloatTimer);
+
+        // 点击页面其他区域：开启声音+隐藏顶部栏
         document.addEventListener('click', (e) => {
-            if (!mask.contains(e.target) && e.target !== audioBtn && e.target !== linkInput) {
+            const targetEls = [mask, audioBtn, linkInput, videoIdSelect, topFloat];
+            if (!targetEls.some(el => el.contains(e.target))) {
                 enableAudio();
-                // 点击页面其他区域隐藏顶部栏
-                topFloat.style.display = 'none';
+                closeTopFloat(); // 直接隐藏顶部栏
             }
         }, { once: false });
+
+        // 下拉菜单切换视频ID事件
+        videoIdSelect.addEventListener('change', (e) => {
+            changeVideoId(e.target.value);
+        });
+
+        // 声音按钮点击
+        audioBtn.addEventListener('click', toggleAudio);
+
         // 初始化
         window.onload = () => {
             updateAudioBtnIcon();
             syncInputValue();
             refreshVideo();
-            // 初始化隐藏顶部栏
-            topFloat.style.display = 'none';
+            topFloat.style.display = 'none'; // 初始化隐藏顶部栏
         };
     </script>
 </body>
